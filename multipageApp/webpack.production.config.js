@@ -3,14 +3,23 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackplugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    "hello-world": "./src/hello-world.js",
+    aurora: "./src/aurora.js",
+  },
   output: {
-    filename: "bundle.[contenthash].js",
+    filename: "[name].[contenthash].js",
     path: path.resolve(__dirname, "./dist"),
     publicPath: "",
     clean: true,
   },
   mode: "production",
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 3000,
+    },
+  },
   module: {
     rules: [
       {
@@ -53,13 +62,24 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "styles.[contenthash].css",
+      filename: "[name].[contenthash].css",
     }),
     new HtmlWebpackplugin({
+      filename: "hello-world.html",
       title: "Hello World",
-      template: "src/index.hbs",
+      template: "src/page-template.hbs",
       description: "Some description",
+      minify: false,
+      chunks: ["hello-world"],
       //   filename: "subfolder/custom_filename.html", // This instructors webpack to create a folder called subfolder and to put our html file inside this subfolder
+    }),
+    new HtmlWebpackplugin({
+      filename: "Aurora.html",
+      title: "Aurora Image",
+      template: "src/page-template.hbs",
+      description: "Aurora Image",
+      minify: false,
+      chunks: ["aurora"],
     }),
   ],
 };

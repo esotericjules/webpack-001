@@ -2,9 +2,12 @@ const path = require("path");
 const HtmlWebpackplugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    "hello-world": "./src/hello-world.js",
+    aurora: "./src/aurora.js",
+  },
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "./dist"),
     publicPath: "",
     clean: true,
@@ -62,10 +65,19 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackplugin({
+      filename: "hello-world.html",
       title: "Hello World",
-      template: "src/index.hbs",
+      template: "src/page-template.hbs",
       description: "Some description",
+      chunks: ["hello-world"],
       //   filename: "subfolder/custom_filename.html", // This instructors webpack to create a folder called subfolder and to put our html file inside this subfolder
+    }),
+    new HtmlWebpackplugin({
+      filename: "Aurora.html",
+      title: "Aurora Image",
+      template: "src/page-template.hbs",
+      description: "Aurora Image",
+      chunks: ["aurora"],
     }),
   ],
 };
